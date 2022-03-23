@@ -20,7 +20,9 @@ import { IgoSearchModule } from './search/search.module';
 import { IgoToastModule } from './toast/toast.module';
 import { IgoGeoWorkspaceModule } from './workspace/workspace.module';
 import { IgoWktModule } from './wkt/wkt.module';
-import { SearchRoleModule } from './search-role/search-role.module'
+import { SearchRoleModule } from './search-role/search-role.module';
+import { SearchBauxModule } from './search-baux/search-baux.module';
+
 
 @NgModule({
   imports: [],
@@ -46,7 +48,8 @@ import { SearchRoleModule } from './search-role/search-role.module'
     IgoToastModule,
     IgoGeoWorkspaceModule,
     IgoWktModule,
-    SearchRoleModule
+    SearchRoleModule,
+    SearchBauxModule
   ]
 })
 export class IgoGeoModule {

@@ -147,6 +147,7 @@ export class SearchParametersComponent implements OnInit {
         this.searchRoleService.searchTableAndPresent('PROPRIO', this.searchFields, this.searchForm, SearchLayerResultsComponent)
       }
       else {
+        this.searchForm['value']['criteria1'] = this.searchForm['value']['criteria1'].replaceAll(' ', '')
         this.searchRoleService.searchTableAndPresent('Role', this.searchFields, this.searchForm, SearchRoleResultsComponent)
       }
     }

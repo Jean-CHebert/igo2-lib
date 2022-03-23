@@ -148,18 +148,18 @@ export class SearchRoleService {
     }
     
     for (let key in searchFields){
-      if(searchFields[key]==="Ville"){
+      //if(searchFields[key]==="Ville"){
         body+= `<ogc:PropertyIsLike wildCard="%" singleChar="_" escape="!">
           <ogc:PropertyName>${searchFields[key]}</ogc:PropertyName>
           <ogc:Literal>%${this.prepareQueryInputs(searchFields[key],searchForm["value"][key])}%</ogc:Literal>
         </ogc:PropertyIsLike>`
-      }
+      /*}
       else{
       body+= `<ogc:PropertyIsEqualTo>
                <ogc:PropertyName>${searchFields[key]}</ogc:PropertyName>
             <ogc:Literal>${this.prepareQueryInputs(searchFields[key],searchForm["value"][key])}</ogc:Literal>
           </ogc:PropertyIsEqualTo>`
-      }
+      }*/
     }
           
     body += `</And>

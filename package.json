@@ -86,7 +86,6 @@
     "@ionic/angular": "^5.6.9",
     "@mat-datetimepicker/core": "^5.1.2",
     "@mdi/angular-material": "^5.3.45",
-    "@mffp.dgpf.ddp.techno/igo2": "^1.6.303",
     "dom-to-image": "^2.6.0",
     "@ngx-translate/core": "^13.0.0",
     "@turf/buffer": "^5.1.5",

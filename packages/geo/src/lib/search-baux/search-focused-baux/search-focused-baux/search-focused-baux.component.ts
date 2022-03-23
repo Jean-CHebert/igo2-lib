@@ -1,32 +1,32 @@
 import { Component, OnInit, OnChanges, Input } from '@angular/core';
 import { LoadingController } from '@ionic/angular';
-import * as labelListTemp from '../assets/search-layer.json';
-import { IgoMap } from '../../map';
-import { DataSourceService } from '../../datasource/shared/datasource.service'
-import { LayerService } from '../../layer/shared/layer.service'
+import * as labelListTemp from '../../assets/search-layer.json';
+import { IgoMap } from '../../../map';
+import { DataSourceService } from '../../../datasource/shared/datasource.service'
+import { LayerService } from '../../../layer/shared/layer.service'
 import { Router } from '@angular/router';
-import { MapService } from '../../map/shared/map.service';
-import { moveToOlFeatures } from '../../feature/shared/feature.utils';
-import { FeatureLayerService } from '../feature-layer-service/feature-layer.service';
-import { SearchRoleUiService } from '../services/search-role-ui.service'
-import { SearchRolePrintService } from '../services/search-role-print.service'
-import { MapImageService } from "../services/map-image.service"
-import { FeatureMotion } from '../../feature/shared'
+import { MapService } from '../../../map/shared/map.service';
+import { moveToOlFeatures } from '../../../feature/shared/feature.utils';
+import { FeatureLayerService } from '../../../search-role/feature-layer-service/feature-layer.service';
+import { SearchBauxUiService } from '../..';
+import { SearchBauxPrintService } from '../../services/search-baux-print.service';
+import { MapImageBauxService } from '../../services/map-image-baux.service';
+import { FeatureMotion } from '../../../feature/shared'
 
 @Component({
-  selector: 'igo-search-focused',
-  templateUrl: './search-focused.component.html',
-  styleUrls: ['./search-focused.component.scss']
+  selector: 'igo-search-focused-baux',
+  templateUrl: './search-focused-baux.component.html',
+  styleUrls: ['./search-focused-baux.component.scss']
 })
-export class SearchFocusedComponent implements OnInit, OnChanges {
+export class SearchFocusedBauxComponent implements OnInit {
 
   @Input() searchResults: any;
   @Input() client: any;
   
   public labelList : any;
-  public title: String = "Role Evaluation";
+  public title: String = "Baux";
   private loading: HTMLIonLoadingElement;
-  public RoleResults : any;
+  public BauxResults : any;
 
   map = new IgoMap({
     controls: {
@@ -48,9 +48,9 @@ export class SearchFocusedComponent implements OnInit, OnChanges {
     private router: Router,
     private mapService: MapService,
     private featureLayerService: FeatureLayerService,
-    private searchRoleUiService:SearchRoleUiService,
-    private searchRolePrintService:SearchRolePrintService,
-    private mapImageService:MapImageService,
+    private searchBauxUiService:SearchBauxUiService,
+    private searchBauxPrintService:SearchBauxPrintService,
+    private mapImageBauxService:MapImageBauxService,
     private loadingController: LoadingController) {
 
     this.dataSourceService
@@ -69,15 +69,15 @@ export class SearchFocusedComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     if (this.searchResults[0]){
-      this.RoleResults = this.searchResults[0];
+      this.BauxResults = this.searchResults[0];
     }
     else{
-      this.RoleResults = this.searchResults;
+      this.BauxResults = this.searchResults;
     }
     this.labelList = labelListTemp;
-    this.view.center = this.RoleResults.geometry.coordinates
-    this.addFeature(this.RoleResults)
-    this.mapImageService.setMap(this.map);
+    this.view.center = this.BauxResults.geometry.coordinates
+    this.addFeature(this.BauxResults)
+    this.mapImageBauxService.setMap(this.map);
   }
 
   updateMap() {
@@ -96,45 +96,45 @@ export class SearchFocusedComponent implements OnInit, OnChanges {
     setTimeout(() => {
       this.map.overlay.clear();
       this.map.overlay.setFeatures([feature], FeatureMotion.Default);
-      this.map.setView({ center: this.RoleResults.geometry.coordinates, zoom: this.view.zoom });
-      this.mapImageService.setMap(this.map);
+      this.map.setView({ center: this.BauxResults.geometry.coordinates, zoom: this.view.zoom });
+      this.mapImageBauxService.setMap(this.map);
       this.updateMap();
     }, 1000);
   }
 
   public openRapportInMap(){
     this.router.navigate(['/igo']);
-    const features = this.featureLayerService.geojsonToFeature([this.RoleResults]);
-    this.featureLayerService.addFeaturesOnNewClusterMapLayer(features, 'roleevaluation', 'RoleEvaluation');
+    const features = this.featureLayerService.geojsonToFeature([this.BauxResults]);
+    this.featureLayerService.addFeaturesOnNewClusterMapLayer(features, 'baux', 'Baux');
     moveToOlFeatures(this.mapService.getMap(), features);
-    this.searchRoleUiService.dissmissModals()
+    this.searchBauxUiService.dissmissModals()
   }
 
   public async exportToPDF(){
-    await this.showLoading()
-    this.searchRolePrintService.exportRoleResultToPdf(this.RoleResults['properties'], this.RoleResults.geometry.coordinates, this.mapImageService.getMap()).then(
+    /*await this.showLoading()
+    this.searchBauxPrintService.exportBauxResultToPdf(this.BauxResults['properties'], this.BauxResults.geometry.coordinates, this.mapImageService.getMap()).then(
       () => {
         this.dismissLoading();
       },
       () => {
         this.dismissLoading();
       }
-    );
+    );*/
   }
 
   public formatKey(key : string){
-    if(this.RoleResults['properties'][key]){
-      return this.labelList['databaseToScreen'][key] + " : " + this.RoleResults['properties'][key]
+    if(this.BauxResults['properties'][key]){
+      return this.labelList['databaseToScreen'][key] + " : " + this.BauxResults['properties'][key]
     }
     return this.labelList['databaseToScreen'][key] + " : Valeur absente"
   }
 
   public lastPage(){
-    this.searchRoleUiService.closeModal()
+    this.searchBauxUiService.closeModal()
   }
 
   public hideSearch(){
-    this.searchRoleUiService.dissmissModals();
+    this.searchBauxUiService.dissmissModals();
   }
 
   private async showLoading() {
