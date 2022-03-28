@@ -166,7 +166,6 @@ export class SearchBauxService {
   }
 
   private requestBodyPerson(table : String, searchFields : any, searchForm : any){
-    var titulaire = " "
     var body = '';
       body += `<wfs:GetFeature service="WFS" version="1.1.0"
       outputFormat="JSON"
@@ -181,11 +180,11 @@ export class SearchBauxService {
 
     for (let key in searchFields){
       let formattedWord = this.formatEntry(searchForm["value"][key])
-      if (searchFields[key] === "NOM") {
-        titulaire = titulaire + formattedWord
-      }
-      else if (searchFields[key] === "PRENOM") {
-        titulaire = formattedWord + titulaire
+      if (searchFields[key] === "NOM" || searchFields[key] === "PRENOM") {
+        body+= `<ogc:PropertyIsLike wildCard="%" singleChar="_" escape="!" matchCase="false">
+                  <ogc:PropertyName>TITULAIRE</ogc:PropertyName>
+                <ogc:Literal>%${formattedWord}%</ogc:Literal>
+              </ogc:PropertyIsLike>`
       }
       else {
         if(searchFields[key]==="CODE"){
@@ -203,12 +202,6 @@ export class SearchBauxService {
       }
     }
     
-    if (titulaire != " ") {
-      body+= `<ogc:PropertyIsLike wildCard="%" singleChar="_" escape="!" matchCase="false">
-               <ogc:PropertyName>TITULAIRE</ogc:PropertyName>
-            <ogc:Literal>%${titulaire}%</ogc:Literal>
-            </ogc:PropertyIsLike>`
-    }
 
     body += `</And>
           </ogc:Filter>
