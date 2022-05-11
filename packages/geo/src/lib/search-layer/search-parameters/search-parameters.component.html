@@ -1,0 +1,77 @@
+<ion-app>
+    <ion-header>
+        <ion-toolbar color="primary">
+            <ion-buttons slot="start" >
+            <button
+              mat-icon-button
+              (click)="lastPage()">
+              <mat-icon svgIcon="arrow-left"></mat-icon>
+            </button>
+            </ion-buttons>
+            <ion-title class="ion-text-center">{{layerName}}</ion-title>
+            <ion-buttons slot="end">
+              <button
+                mat-icon-button
+                (click)="hideSearch()">
+              <mat-icon svgIcon="close"></mat-icon>
+            </button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      
+      
+    
+      <ion-content>
+    
+        <ion-item>
+          <ion-grid>
+            <ion-row>
+              <ion-col col-6 *ngFor="let searchableTab of searchableTabs">
+                <ion-button [fill]="fillButton(searchableTab)" color="primary" expand="block" (click)="switchSearchTab(searchableTab)">{{searchableTab}}</ion-button>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-item>
+
+        <ion-list>
+            <form [formGroup]='searchForms[searchType]'>
+              <ion-item *ngFor="let control of searchForms[searchType].controls | keyvalue">
+                <ion-select (ionChange)="setSearchField($event, control)" value="control.key" selectedText="{{databaseToScreen[control.key]}}" placeholder="Critère" text-center>
+                    <ion-select-option *ngFor="let searchField of searchableFields[searchType]" [value]="searchField">{{databaseToScreen[searchField]}}</ion-select-option>
+                  </ion-select>
+                <ion-input required type="text" [formControlName]="control.key"></ion-input>
+                <ion-icon (click)="removeSearchField(control)" name="close-circle"></ion-icon>
+              </ion-item>
+            </form>
+        </ion-list>
+        
+
+        <div class="bottom-buttons">
+          <div class="flex-align-center" *ngIf="layerName === 'RoleEvaluation'">
+            <span>Recherche étendue</span>
+            <ion-toggle (ionChange)="toggleExtendedSearch()"></ion-toggle>
+            <ion-icon (click)="presentInfoAlert()" name="information-circle"></ion-icon>
+          </div>
+            <div>
+                <button mat-raised-button
+                class="add-button"
+                (click)="addSearchField()"
+                [disabled]="maxSearchFields()">
+                Ajouter un critère
+                </button>
+            </div>
+            &nbsp;
+            <div>
+                <button mat-raised-button
+                class="search-button"
+                (click)="searchLayer()">
+                Rechercher
+                </button>
+            </div>
+        </div>
+      
+          
+      
+      </ion-content>
+    
+    </ion-app>

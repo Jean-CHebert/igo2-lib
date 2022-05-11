@@ -37,10 +37,7 @@ export * from './lib/query/query.module';
 export * from './lib/search/search.module';
 export * from './lib/toast/toast.module';
 export * from './lib/wkt/wkt.module';
-export * from './lib/search-role/search-role.module'
-export * from './lib/search-baux/search-baux.module'
-export * from './lib/search-baux/search-layer-results-baux/search-layer-results-baux'
-export * from './lib/search-baux/search-focused-baux/search-focused-baux'
+export * from "./lib/search-layer/search-layer.module"
 
 export * from './lib/catalog';
 export * from './lib/datasource';
@@ -62,6 +59,5 @@ export * from './lib/search';
 export * from './lib/toast';
 export * from './lib/utils';
 export * from './lib/wkt';
-export * from './lib/search-role';
-export * from './lib/search-baux';
+export * from './lib/search-layer'
 export * from './lib/workspace';

@@ -20,8 +20,7 @@ import { IgoSearchModule } from './search/search.module';
 import { IgoToastModule } from './toast/toast.module';
 import { IgoGeoWorkspaceModule } from './workspace/workspace.module';
 import { IgoWktModule } from './wkt/wkt.module';
-import { SearchRoleModule } from './search-role/search-role.module';
-import { SearchBauxModule } from './search-baux/search-baux.module';
+import { SearchLayerModule } from "./search-layer/search-layer.module"
 
 
 @NgModule({
@@ -48,8 +47,7 @@ import { SearchBauxModule } from './search-baux/search-baux.module';
     IgoToastModule,
     IgoGeoWorkspaceModule,
     IgoWktModule,
-    SearchRoleModule,
-    SearchBauxModule
+    SearchLayerModule
   ]
 })
 export class IgoGeoModule {

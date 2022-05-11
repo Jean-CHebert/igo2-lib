@@ -32,10 +32,8 @@ import { Layer } from '../shared/layers/layer';
 import { LinkedProperties, LayersLink } from '../shared/layers/layer.interface';
 import { MatSliderChange } from '@angular/material/slider';
 
-import { SearchParametersComponent } from '../../search-role/search-parameters/search-parameters.component';
-import { SearchRoleUiService } from '../../search-role/services/search-role-ui.service'
-import { SearchParametersBauxComponent } from '../../search-baux/search-parameters-baux/search-parameters-baux/search-parameters-baux.component';
-import { SearchBauxUiService } from '../../search-baux/services/search-baux-ui.service';
+import { SearchLayerUiService } from '../../search-layer/services/search-layer-ui.service'
+import { SearchParametersComponent } from "../../search-layer/search-parameters/search-parameters.component"
 
 // TODO: This class could use a clean up. Also, some methods could be moved ealsewhere
 @Component({
@@ -228,8 +226,7 @@ export class LayerListComponent implements OnInit, OnDestroy {
   private selectAllCheck$$: Subscription;
 
   constructor(private elRef: ElementRef,
-    private searchRoleUiService: SearchRoleUiService,
-    private searchBauxUiService: SearchBauxUiService) { }
+    private searchLayerUiService: SearchLayerUiService) { }
 
   /**
    * Subscribe to the search term stream and trigger researches
@@ -548,12 +545,7 @@ export class LayerListComponent implements OnInit, OnDestroy {
   }
 
   public showSearch(){
-    if (this.activeLayer.options.title === "Role Evaluation"){
-      this.searchRoleUiService.showSearchResults(SearchParametersComponent, this.isSearchable().split(","))
-    }
-    else if (this.activeLayer.options.title === "Baux"){
-      this.searchBauxUiService.showSearchResults(SearchParametersBauxComponent, this.isSearchable().split(","))
-    }
+    this.searchLayerUiService.showSearchWindow(SearchParametersComponent, this.activeLayer.options.title)
   }
 
   private next() {
