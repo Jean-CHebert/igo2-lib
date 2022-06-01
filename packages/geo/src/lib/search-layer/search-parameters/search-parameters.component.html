@@ -47,7 +47,7 @@
         
 
         <div class="bottom-buttons">
-          <div class="flex-align-center" *ngIf="layerName === 'RoleEvaluation'">
+          <div class="flex-align-center" *ngIf="layerName === 'RoleEvaluation' && searchType !== 'Lot'">
             <span>Recherche étendue</span>
             <ion-toggle (ionChange)="toggleExtendedSearch()"></ion-toggle>
             <ion-icon (click)="presentInfoAlert()" name="information-circle"></ion-icon>

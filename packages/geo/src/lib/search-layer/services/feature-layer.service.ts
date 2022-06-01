@@ -4,11 +4,13 @@ import { QueryableDataSourceOptions } from '../../query/shared/query.interfaces'
 import { VectorLayer } from '../../layer/shared/layers/vector-layer';
 import { ClusterDataSourceOptions } from '../../datasource/shared/datasources/cluster-datasource.interface';
 import { ClusterDataSource } from '../../datasource/shared/datasources/cluster-datasource';
+import { FeatureDataSourceOptions } from '../../datasource/shared/datasources/feature-datasource.interface';
+import { FeatureDataSource } from '../../datasource/shared/datasources/feature-datasource';
 import { Feature } from '../../feature/shared/feature.interfaces';
 import { FEATURE } from '../../feature/shared/feature.enums';
 import { featureToOl } from '../../feature/shared/feature.utils';
 import { StyleService } from '../../layer/shared/style.service';
-
+import * as olStyle from 'ol/style';
 import { ClusterParam } from '../../layer';
 import { ClusterRange } from '../../layer';
 
@@ -44,6 +46,68 @@ export class FeatureLayerService {
       features.push(olFeature);
     }
     return features;
+  }
+
+  geojsonToFeatureNonPoint(geogson: any[]) {
+    const features: Feature[] = new Array();
+
+    for (let i = 0; i < geogson.length; i++) {
+      const feature: Feature = {
+        type: FEATURE,
+        projection: 'EPSG:4326',
+        properties: geogson[i].properties,
+        geometry: {
+          type: geogson[i].geometry.type,
+          coordinates: geogson[i].geometry.coordinates
+        },
+        meta: {
+          id: i,
+          title: `Résultat ${i}`
+        }
+      };
+      const olFeature = featureToOl(feature, this.mapService.getMap().projection);
+      features.push(olFeature);
+    }
+    return features;
+  }
+
+  public addPolygonNonPoint(features: Feature[], layerId: string, layerName: string) {
+ 
+    const resultsLayer = this.mapService.getMap().getLayerById(layerId);
+    if (resultsLayer !== undefined) {
+      this.mapService.getMap().removeLayer(resultsLayer);
+    }
+
+    const stroke = new olStyle.Stroke({
+      color: [255, 0, 0, 1],
+      width: 2
+    });
+
+    const fill = new olStyle.Fill({
+      color: [255, 0, 0, 0.4]
+    });
+    const sourceOptions: FeatureDataSourceOptions & QueryableDataSourceOptions = {
+      type: 'vector',
+      queryable: true
+    };
+    const source = new FeatureDataSource(sourceOptions);
+
+    source.ol.addFeatures(features);
+    const layer = new VectorLayer({
+      title: layerName,
+      id: layerId,
+      source,
+      style: new olStyle.Style({
+        stroke,
+        fill,
+        image: new olStyle.Circle({
+          radius: 5,
+          stroke,
+          fill
+        })
+      })
+    });
+    this.mapService.getMap().addLayer(layer);
   }
 
   public addFeaturesOnNewClusterMapLayer(features: Feature[], layerId: string, layerName: string) {
@@ -83,7 +147,7 @@ export class FeatureLayerService {
     const clusterParam: ClusterParam = {
       clusterRanges: [clusterRange]
     };
-    const sourceOptions: ClusterDataSourceOptions & QueryableDataSourceOptions = {
+    const sourceOptions: ClusterDataSourceOptions & QueryableDataSourceOptions= {
       distance: 40,
       queryable: true,
       type: 'cluster'

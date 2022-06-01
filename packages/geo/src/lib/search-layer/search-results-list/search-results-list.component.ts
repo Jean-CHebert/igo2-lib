@@ -30,6 +30,14 @@ export class SearchResultsListComponent implements OnInit {
     this.searchLayerUiService.dismissLoading()
   }
 
+  public formatMat18RoleEvaluation(resultProperties) {
+    let formattedString = resultProperties["id_provinc"].substring(5)
+    if (resultProperties["sufNoLot"]) {
+      formattedString += " - " + resultProperties["sufNoLot"]
+    }
+    return formattedString
+  }
+
   public lastPage(){
     this.searchLayerUiService.closeModal()
   }

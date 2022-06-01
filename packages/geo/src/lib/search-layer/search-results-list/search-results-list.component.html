@@ -31,8 +31,7 @@
             </ion-label>
             <ion-label *ngIf="(this.layerName === 'RoleEvaluation' && !this.searchResults[0]['properties']['mat18'])">
                 <p>{{'Numéro du lot : ' + result["properties"]["noLot"]}}</p>
-                <p>{{'Matricule 18 : ' + result["properties"]["id_provinc"].substring(5)}}</p>
-                <p>{{'Adresse : ' + result["properties"]["Adresse"]}}</p>
+                <p>{{'Matricule 18 : ' + formatMat18RoleEvaluation(result["properties"])}}</p>
             </ion-label>
           </ion-item>
         </ion-list>

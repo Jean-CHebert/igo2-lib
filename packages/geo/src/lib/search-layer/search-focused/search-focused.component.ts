@@ -23,7 +23,6 @@ export class SearchFocusedComponent implements OnInit {
   @Input() layerName: any;
   
   public labelList : any;
-  public title: String = "Role Evaluation";
 
   map = new IgoMap({
     controls: {
@@ -70,7 +69,10 @@ export class SearchFocusedComponent implements OnInit {
     this.labelList = labelListTemp[this.layerName];
 
     if (this.searchResults.geometry.type === "Polygon") {
-      this.view.center = this.getPolygonCenter(this.searchResults.geometry)
+      this.view.center = this.getPolygonCenter(this.searchResults.geometry.coordinates)
+    }
+    else if (this.searchResults.geometry.type === "MultiPolygon") {
+      this.view.center = this.getPolygonCenter(this.searchResults.geometry.coordinates[0])
     }
     else {
       this.view.center = this.searchResults.geometry.coordinates
@@ -81,12 +83,12 @@ export class SearchFocusedComponent implements OnInit {
     this.searchLayerUiService.dismissLoading()
   }
 
-  getPolygonCenter(geometry) : number[] {
-    let minPointX = geometry.coordinates[0][0][0]
-    let minPointY = geometry.coordinates[0][0][1]
-    let maxPointX = geometry.coordinates[0][0][0]
-    let maxPointY = geometry.coordinates[0][0][1]
-    for (let point of geometry.coordinates[0]) {
+  getPolygonCenter(coordinates) : number[] {
+    let minPointX = coordinates[0][0][0]
+    let minPointY = coordinates[0][0][1]
+    let maxPointX = coordinates[0][0][0]
+    let maxPointY = coordinates[0][0][1]
+    for (let point of coordinates[0]) {
       if (point[0] > maxPointX){
         maxPointX = point[0]
       }
@@ -129,15 +131,25 @@ export class SearchFocusedComponent implements OnInit {
 
   public openRapportInMap(){
     this.router.navigate(['/igo']);
-    let newFeature = this.searchResults
-    if (this.searchResults.geometry.type === "Polygon"){
-      newFeature.geometry.type = "Point"
-      newFeature.geometry.coordinates = this.view.center
+    if (this.searchResults.geometry.type === "Point"){
+      const features = this.featureLayerService.geojsonToFeature([this.searchResults]);
+      this.featureLayerService.addFeaturesOnNewClusterMapLayer(features, this.layerName.toLowerCase(), this.layerName);
+      moveToOlFeatures(this.mapService.getMap(), features);
+      this.searchLayerUiService.dissmissModals()
     }
-    const features = this.featureLayerService.geojsonToFeature([newFeature]);
-    this.featureLayerService.addFeaturesOnNewClusterMapLayer(features, this.layerName.toLowerCase(), this.layerName);
-    moveToOlFeatures(this.mapService.getMap(), features);
-    this.searchLayerUiService.dissmissModals()
+    else {
+      
+      const features = this.featureLayerService.geojsonToFeatureNonPoint([this.searchResults])
+      this.featureLayerService.addPolygonNonPoint(features, this.layerName.toLowerCase(), this.layerName)
+
+      //create a point feature to zoom to
+      let zoomToFeature = JSON.parse(JSON.stringify(this.searchResults))
+      zoomToFeature.geometry.type = "Point"
+      zoomToFeature.geometry.coordinates = this.view.center
+      const zoomToOlFeatures = this.featureLayerService.geojsonToFeature([zoomToFeature]);
+      moveToOlFeatures(this.mapService.getMap(), zoomToOlFeatures);
+      this.searchLayerUiService.dissmissModals()
+    }
   }
 
   public async exportToPDF(){

@@ -114,7 +114,7 @@ export class SearchParametersComponent implements OnInit {
 
     let options = {
       "table": this.searchType,
-      "extended": this.extendedSearch
+      "extendedSearch": this.extendedSearch
     }
 
     return options

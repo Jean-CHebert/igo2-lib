@@ -541,7 +541,7 @@ export class LayerListComponent implements OnInit, OnDestroy {
   public isSearchable(){
     let SrcOptions:any = null
     if (this.activeLayer.options.sourceOptions) SrcOptions=this.activeLayer.options.sourceOptions
-    return SrcOptions.searchable
+    if (SrcOptions) return SrcOptions.searchable
   }
 
   public showSearch(){

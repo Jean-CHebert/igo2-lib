@@ -26,11 +26,13 @@ export class SearchRoleService {
         if (options.table === "Proprio" || options.table === "Compagnie"){
           var url = this.roleUrl + '/PROPRIO'
         }
-        else{
-          var url = this.roleUrl + '/Role'
+        else if (options.table === "Lot"){
+          var url = this.roleUrl + '/Lots'
+        }
+        else {
+          var url = this.roleUrl + '/Role_s'
         }
         url += '/ows?SERVICE=WFS&REQUEST=GetFeature'
-
         xhr.open('POST', url)
         xhr.setRequestHeader('Authorization',`Bearer ${token}`);
         
@@ -39,7 +41,6 @@ export class SearchRoleService {
         }
         xhr.onreadystatechange = function(){
           if(xhr.readyState===XMLHttpRequest.DONE){
-  
             var status = xhr.status;
             if(status===0 || (status >= 200 && status < 400)){
               resolve(JSON.parse(xhr.response))
@@ -101,7 +102,19 @@ export class SearchRoleService {
             <ogc:Literal>Personne morale aux fins d imposition scolaire</ogc:Literal>
           </ogc:PropertyIsEqualTo>`
     }
-    else{
+    else if (options.table === "Lot"){
+      body += `<wfs:GetFeature service="WFS" version="1.0.0"
+            outputFormat="JSON"
+            xmlns:wfs="http://www.opengis.net/wfs"
+            xmlns:ogc="http://www.opengis.net/ogc"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="http://www.opengis.net/wfs
+                                http://schemas.opengis.net/wfs/1.0.0/WFS-basic.xsd">
+            <wfs:Query typeName="RoleEvaluation:Lots">
+              <ogc:Filter>
+                  <And>`
+    }
+    else {
       body += `<wfs:GetFeature service="WFS" version="1.0.0"
       outputFormat="JSON"
       xmlns:wfs="http://www.opengis.net/wfs"
@@ -109,7 +122,7 @@ export class SearchRoleService {
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:schemaLocation="http://www.opengis.net/wfs
                           http://schemas.opengis.net/wfs/1.0.0/WFS-basic.xsd">
-      <wfs:Query typeName="RoleEvaluation:Role">
+      <wfs:Query typeName="RoleEvaluation:Role_s">
         <ogc:Filter>
             <And>`
     }
