@@ -92,9 +92,13 @@ export class FeatureLayerService {
     };
     const source = new FeatureDataSource(sourceOptions);
 
+    const date = new Date();
+    const today = date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear();
+    const time = date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
+
     source.ol.addFeatures(features);
     const layer = new VectorLayer({
-      title: layerName,
+      title: `Résultats ${layerName} ${today} ${time}`,
       id: layerId,
       source,
       style: new olStyle.Style({
