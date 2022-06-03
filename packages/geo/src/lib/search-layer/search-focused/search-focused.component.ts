@@ -139,8 +139,12 @@ export class SearchFocusedComponent implements OnInit {
     }
     else {
       
-      const features = this.featureLayerService.geojsonToFeatureNonPoint([this.searchResults])
-      this.featureLayerService.addPolygonNonPoint(features, this.layerName.toLowerCase(), this.layerName)
+      const features = this.featureLayerService.geojsonToPolygonFeature([this.searchResults])
+      this.featureLayerService.addNonPointFeature(features, " Résultats - " + this.layerName.toLowerCase(), "Résultats - " + this.layerName)
+
+      //Add a line feature corresponding to polygon. Apparently better for exportation
+      const featuresExport = this.featureLayerService.geojsonPolygonToLineFeature([this.searchResults])
+      this.featureLayerService.addNonPointFeature(featuresExport, "Export - " + this.layerName.toLowerCase(), "Export - " + this.layerName)
 
       //create a point feature to zoom to
       let zoomToFeature = JSON.parse(JSON.stringify(this.searchResults))

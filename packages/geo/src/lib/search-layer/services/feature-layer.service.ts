@@ -48,7 +48,7 @@ export class FeatureLayerService {
     return features;
   }
 
-  geojsonToFeatureNonPoint(geogson: any[]) {
+  geojsonToPolygonFeature(geogson: any[]) {
     const features: Feature[] = new Array();
 
     for (let i = 0; i < geogson.length; i++) {
@@ -71,7 +71,52 @@ export class FeatureLayerService {
     return features;
   }
 
-  public addPolygonNonPoint(features: Feature[], layerId: string, layerName: string) {
+  geojsonPolygonToLineFeature(geogson: any[]) {
+    const features: Feature[] = new Array();
+
+    for (let i = 0; i < geogson.length; i++) {
+      let feature: Feature;
+      if (geogson[i].geometry.type === "MultiPolygon") {
+        feature = {
+          type: FEATURE,
+          projection: 'EPSG:4326',
+          properties: geogson[i].properties,
+          geometry: {
+            type: "MultiLineString",
+            coordinates: geogson[i].geometry.coordinates
+          },
+          meta: {
+            id: i,
+            title: `Résultat ${i}`
+          }
+        };
+        for (let j=0; j < feature.geometry.coordinates.length; j++) {
+          feature.geometry.coordinates[j] = feature.geometry.coordinates[j][0]
+        }
+      }
+      else if (geogson[i].geometry.type === "Polygon") {
+        feature= {
+          type: FEATURE,
+          projection: 'EPSG:4326',
+          properties: geogson[i].properties,
+          geometry: {
+            type: "LineString",
+            coordinates: geogson[i].geometry.coordinates[0]
+          },
+          meta: {
+            id: i,
+            title: `Résultat ${i}`
+          }
+        };
+      }
+      
+      const olFeature = featureToOl(feature, this.mapService.getMap().projection);
+      features.push(olFeature);
+    }
+    return features;
+  }
+
+  public addNonPointFeature(features: Feature[], layerId: string, layerName: string) {
  
     const resultsLayer = this.mapService.getMap().getLayerById(layerId);
     if (resultsLayer !== undefined) {
@@ -98,7 +143,7 @@ export class FeatureLayerService {
 
     source.ol.addFeatures(features);
     const layer = new VectorLayer({
-      title: `Résultats ${layerName} ${today} ${time}`,
+      title: `${layerName} ${today} ${time}`,
       id: layerId,
       source,
       style: new olStyle.Style({
