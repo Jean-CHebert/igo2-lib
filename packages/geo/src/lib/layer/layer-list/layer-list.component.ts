@@ -32,6 +32,9 @@ import { Layer } from '../shared/layers/layer';
 import { LinkedProperties, LayersLink } from '../shared/layers/layer.interface';
 import { MatSliderChange } from '@angular/material/slider';
 
+import { SearchLayerUiService } from '../../search-layer/services/search-layer-ui.service'
+import { SearchParametersComponent } from "../../search-layer/search-parameters/search-parameters.component"
+
 // TODO: This class could use a clean up. Also, some methods could be moved ealsewhere
 @Component({
   selector: 'igo-layer-list',
@@ -222,7 +225,8 @@ export class LayerListComponent implements OnInit, OnDestroy {
   public selectAllCheck$ = new BehaviorSubject<boolean>(undefined);
   private selectAllCheck$$: Subscription;
 
-  constructor(private elRef: ElementRef) { }
+  constructor(private elRef: ElementRef,
+    private searchLayerUiService: SearchLayerUiService) { }
 
   /**
    * Subscribe to the search term stream and trigger researches
@@ -533,6 +537,17 @@ export class LayerListComponent implements OnInit, OnDestroy {
       }, 100);
     }
   }
+
+  public isSearchable(){
+    let SrcOptions:any = null
+    if (this.activeLayer.options.sourceOptions) SrcOptions=this.activeLayer.options.sourceOptions
+    if (SrcOptions) return SrcOptions.searchable
+  }
+
+  public showSearch(){
+    this.searchLayerUiService.showSearchWindow(SearchParametersComponent, this.activeLayer.options.title)
+  }
+
   private next() {
     this.change$.next();
   }

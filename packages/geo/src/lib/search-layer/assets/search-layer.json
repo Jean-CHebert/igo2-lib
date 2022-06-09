@@ -1,0 +1,130 @@
+{
+
+    "RoleEvaluation": {
+
+        "searchTab": {
+            "Proprio": [
+                "Nom",
+                "Prenom",
+                "mat18",
+                "Ville"
+            ],
+
+            "Compagnie": [
+                "Nom",
+                "mat18",
+                "Ville"
+            ],
+
+            "Lot": [
+                "noLot"
+            ]
+            
+        },
+
+        "searchResultsList": [
+            ["Nom", "Prenom"],
+            ["Adresse", "Ville"],
+            ["mat18"]
+        ],
+
+        "focusResultField": "id_provinc",
+
+        "databaseToScreen": {
+            "mat18" : "Matricule 18",
+            "Prenom" : "Prénom",
+            "Nom" : "Nom",
+            "Ville" : "Ville",
+            "typePossession" : "Type de possession",
+            "Proprios" : "Propriétaire(s)",
+            "anrole" : "Année du role",
+            "AnneeActivation" : "Année d'activation",
+            "code_mun" : "Code municipal",
+            "Adresse" : "Adresse",
+            "designSecondaire" : "Désignation secondaire",
+            "id_provinc" : "Id provincial",
+            "munic" : "Municipalité",
+            "noLot" : "Numéro du lot",
+            "noLotNonRenove" : "Numéro du lot non rénové",
+            "nbr_coprop" : "Nombre de copropiétaires",
+            "nomCadNonRenove" : "Nom du cadastre non rénové",
+            "valBatim" : "Valeur du bâtiment",
+            "valImmeub" : "Valeur de l'immeuble",
+            "valTerrain" : "Valeur du terrain",
+            "nb_locaux": "Nombre de locaux",
+            "nb_logements": "Nombre de logements",
+            "sup_totale": "Superficie totale",
+            "usag_predom": "Usage prédominant",
+            "utilisation": "Utilisation"
+        },
+    
+        "order": 
+            [   
+                "nbr_coprop",
+                "Proprios",
+                "id_provinc",
+                "code_mun",
+                "Adresse",
+                "munic",
+                "valBatim",
+                "valImmeub",
+                "valTerrain",
+                "anrole",
+                "designSecondaire",
+                "noLot",
+                "noLotNonRenove",
+                "nomCadNonRenove",
+                "typePossession",
+                "nb_locaux",
+                "nb_logements",
+                "sup_totale",
+                "usag_predom",
+                "utilisation"
+            ]
+    },
+
+    "Baux": {
+
+        "searchTab": {
+            "Compagnie": [
+                "TITULAIRE",
+                "CODE"
+            ],
+
+            "Personne": [
+                "NOM",
+                "PRENOM",
+                "CODE"
+            ]
+        },
+
+        "databaseToScreen": {
+            "TITULAIRE" : "Nom",
+            "CODE" : "Code",
+            "NOM" : "Nom",
+            "PRENOM" : "Prenom",
+            "DATE_DEBUT": "Date de début",
+            "DATE_FIN": "Date de fin",
+            "EMETTEUR": "Émetteur",
+            "TYPE": "Type"
+        },
+
+        "searchResultsList": [
+            ["TITULAIRE"],
+            ["CODE"]
+        ],
+
+        "focusResultField": "CODE",
+
+        "order": 
+            [   
+                "EMETTEUR",
+                "CODE",
+                "EMETTEUR",
+                "TYPE",
+                "DATE_DEBUT",
+                "DATE_FIN"
+            ]
+
+        }
+}
